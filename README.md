@@ -1,5 +1,4 @@
-Resizing and Serving images on Google Cloud Storage
-==================================
+# Resizing and Serving images on Google Cloud Storage
 
 Resize your image files on Google Cloud storage with [Images Python API](https://developers.google.com/appengine/docs/python/images/) powered by Google.
 
@@ -11,13 +10,22 @@ Resize your image files on Google Cloud storage with [Images Python API](https:/
 git clone https://github.com/albertcht/image-resize-gae.git
 ```
 
-2. Install the requirements. (Flask)
+2. Create virtualenv outside of the project directory
+
+```
+virtualenv env
+source env/bin/activate
+```
+
+3. Install the requirements. (Flask)
+
+make sure you are back in the root directory
 
 ```
 pip install -r requirements.txt -t lib
 ```
 
-3. Deploy to App Engine.
+4. Deploy to App Engine.
 
 ```
 gcloud app deploy
@@ -28,7 +36,7 @@ gcloud app deploy
 1. Get a serving url from existed file on Google Cloud Storage:
 
 ```
-curl https://PROJECT_NAME.appspot.com/image-url?bucket=mybuckey&image=image_name.jpg
+curl https://PROJECT_NAME.appspot.com/image-url?bucket=mybucket&image=image_name.jpg
 ```
 
 2. It will return a url that looks something like:
@@ -47,69 +55,69 @@ https://lh3.googleusercontent.com/93uhV8K2yHkRuD63KJxlTi7SxjHS8my2emuHmGLZxEmX99
 
 ## Examples
 
-* By default it returns an image of a maximum length of 512px. [(link)](https://lh3.googleusercontent.com/93uhV8K2yHkRuD63KJxlTi7SxjHS8my2emuHmGLZxEmX99_XAjTN3c_2zmKVb3XQ5d8FEkwtgbGjyYpaDQg)
+- By default it returns an image of a maximum length of 512px. [(link)](https://lh3.googleusercontent.com/93uhV8K2yHkRuD63KJxlTi7SxjHS8my2emuHmGLZxEmX99_XAjTN3c_2zmKVb3XQ5d8FEkwtgbGjyYpaDQg)
 
-* By appending the =sXX to the end of it where XX can be any integer in the range of 0–1600 and it will result to scale down the image to longest dimension without affecting the original aspect ratio. [(link =s256)](https://lh3.googleusercontent.com/93uhV8K2yHkRuD63KJxlTi7SxjHS8my2emuHmGLZxEmX99_XAjTN3c_2zmKVb3XQ5d8FEkwtgbGjyYpaDQg=s256)
+- By appending the =sXX to the end of it where XX can be any integer in the range of 0–1600 and it will result to scale down the image to longest dimension without affecting the original aspect ratio. [(link =s256)](https://lh3.googleusercontent.com/93uhV8K2yHkRuD63KJxlTi7SxjHS8my2emuHmGLZxEmX99_XAjTN3c_2zmKVb3XQ5d8FEkwtgbGjyYpaDQg=s256)
 
-* By appending =sXX-c a cropped version of that image is being returned as a response. [(link =s400-c)](https://lh3.googleusercontent.com/93uhV8K2yHkRuD63KJxlTi7SxjHS8my2emuHmGLZxEmX99_XAjTN3c_2zmKVb3XQ5d8FEkwtgbGjyYpaDQg=s400-c)
+- By appending =sXX-c a cropped version of that image is being returned as a response. [(link =s400-c)](https://lh3.googleusercontent.com/93uhV8K2yHkRuD63KJxlTi7SxjHS8my2emuHmGLZxEmX99_XAjTN3c_2zmKVb3XQ5d8FEkwtgbGjyYpaDQg=s400-c)
 
-* By appending =s0 (s zero) the original image is being returned without any resize or modification. [(link =s0)](https://lh3.googleusercontent.com/93uhV8K2yHkRuD63KJxlTi7SxjHS8my2emuHmGLZxEmX99_XAjTN3c_2zmKVb3XQ5d8FEkwtgbGjyYpaDQg=s0)
+- By appending =s0 (s zero) the original image is being returned without any resize or modification. [(link =s0)](https://lh3.googleusercontent.com/93uhV8K2yHkRuD63KJxlTi7SxjHS8my2emuHmGLZxEmX99_XAjTN3c_2zmKVb3XQ5d8FEkwtgbGjyYpaDQg=s0)
 
 ## Advanced Parameters
 
 ### SIZE / CROP
 
-* **s640** — generates image 640 pixels on largest dimension
-* **s0** — original size image
-* **w100** — generates image 100 pixels wide
-* **h100** — generates image 100 pixels tall
-* **s** (without a value) — stretches image to fit dimensions
-* **c** — crops image to provided dimensions
-* **n** — same as c, but crops from the center
-* **p** — smart square crop, attempts cropping to faces
-* **pp** — alternate smart square crop, does not cut off faces (?)
-* **cc** — generates a circularly cropped image
-* **ci** — square crop to smallest of: width, height, or specified =s parameter
-* **nu** — no-upscaling. Disables resizing an image to larger than its original resolution.
+- **s640** — generates image 640 pixels on largest dimension
+- **s0** — original size image
+- **w100** — generates image 100 pixels wide
+- **h100** — generates image 100 pixels tall
+- **s** (without a value) — stretches image to fit dimensions
+- **c** — crops image to provided dimensions
+- **n** — same as c, but crops from the center
+- **p** — smart square crop, attempts cropping to faces
+- **pp** — alternate smart square crop, does not cut off faces (?)
+- **cc** — generates a circularly cropped image
+- **ci** — square crop to smallest of: width, height, or specified =s parameter
+- **nu** — no-upscaling. Disables resizing an image to larger than its original resolution.
 
 ### ROTATION
 
-* **fv** — flip vertically
-* **fh** — flip horizontally
-* **r{90, 180, 270}** — rotates image 90, 180, or 270 degrees clockwise
+- **fv** — flip vertically
+- **fh** — flip horizontally
+- **r{90, 180, 270}** — rotates image 90, 180, or 270 degrees clockwise
 
 ### IMAGE FORMAT
 
-* **rj** — forces the resulting image to be JPG
-* **rp** — forces the resulting image to be PNG
-* **rw** — forces the resulting image to be WebP
-* **rg** — forces the resulting image to be GIF
+- **rj** — forces the resulting image to be JPG
+- **rp** — forces the resulting image to be PNG
+- **rw** — forces the resulting image to be WebP
+- **rg** — forces the resulting image to be GIF
 
-* **v{0,1,2,3}** — sets image to a different format option (works with JPG and WebP)
+- **v{0,1,2,3}** — sets image to a different format option (works with JPG and WebP)
 
 > Forcing PNG, WebP and GIF outputs can work in combination with circular crops for a transparent background. Forcing JPG can be combined with border color to fill in backgrounds in transparent images.
 
 ### ANIMATED GIFs
 
-* **rh** — generates an MP4 from the input image
-* **k** — kill animation (generates static image)
+- **rh** — generates an MP4 from the input image
+- **k** — kill animation (generates static image)
 
 ### Filters
 
-* **fSoften=1,100,0**: - where 100 can go from 0 to 100 to blur the image
-* **fVignette=1,100,1.4,0,000000** where 100 controls the size of the gradient and 000000 is RRGGBB of the color of the border shadow
-* **fInvert=0,1** inverts the image regardless of the value provided
-* **fbw=0,1** makes the image black and white regardless of the value provided
+- **fSoften=1,100,0**: - where 100 can go from 0 to 100 to blur the image
+- **fVignette=1,100,1.4,0,000000** where 100 controls the size of the gradient and 000000 is RRGGBB of the color of the border shadow
+- **fInvert=0,1** inverts the image regardless of the value provided
+- **fbw=0,1** makes the image black and white regardless of the value provided
 
 ### MISC.
 
-* **b10** — add a 10px border to image
-* **c0xAARRGGBB** — set border color, eg. =c0xffff0000 for red
-* **d** — adds header to cause browser download
-* **e7** — set cache-control max-age header on response to 7 days
-* **l100** — sets JPEG quality to 100% (1-100)
-* **h** — responds with an HTML page containing the image
-* **g** — responds with XML used by Google's pan/zoom
+- **b10** — add a 10px border to image
+- **c0xAARRGGBB** — set border color, eg. =c0xffff0000 for red
+- **d** — adds header to cause browser download
+- **e7** — set cache-control max-age header on response to 7 days
+- **l100** — sets JPEG quality to 100% (1-100)
+- **h** — responds with an HTML page containing the image
+- **g** — responds with XML used by Google's pan/zoom
 
 ## Full Reference
 
@@ -207,5 +215,6 @@ int:  cv  ==> FaceCropVersion
 ```
 
 > Reference:
-> * https://stackoverflow.com/questions/25148567/list-of-all-the-app-engine-images-service-get-serving-url-uri-options
-> * https://medium.com/google-cloud/uploading-resizing-and-serving-images-with-google-cloud-platform-ca9631a2c556
+>
+> - https://stackoverflow.com/questions/25148567/list-of-all-the-app-engine-images-service-get-serving-url-uri-options
+> - https://medium.com/google-cloud/uploading-resizing-and-serving-images-with-google-cloud-platform-ca9631a2c556
